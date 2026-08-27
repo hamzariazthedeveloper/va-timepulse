@@ -1,30 +1,34 @@
-import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
 
 
+// Public Pages
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
-import Sidebar from "./components/Sidebar";
 
-
-import ProjectDetails from "./pages/ProjectDetails";
+// Private Pages
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AddTimeEntry from "./pages/AddTimeEntry";
 import Timesheet from "./pages/Timesheet";
 import Projects from "./pages/Projects";
+import ProjectDetails from "./pages/ProjectDetails";
 import Reports from "./pages/Reports";
 import Team from "./pages/Team";
 import Billing from "./pages/Billing";
 import Settings from "./pages/Settings";
 
 
+// Components
+import Sidebar from "./components/Sidebar";
+
+
+
 
 
 export default function App(){
-
 
 
 const { user } = useAuth();
@@ -33,21 +37,68 @@ const { darkMode } = useTheme();
 
 
 
-const [collapsed,setCollapsed] = useState(false);
 
 
 
+// =========================
+// NOT LOGGED IN
+// =========================
 
 
 if(!user){
 
-return <Login />
+
+return (
+
+<Routes>
+
+
+<Route
+
+path="/login"
+
+element={<Login />}
+
+/>
+
+
+
+<Route
+
+path="/signup"
+
+element={<Signup />}
+
+/>
+
+
+
+<Route
+
+path="*"
+
+element={<Navigate to="/login" replace />}
+
+/>
+
+
+
+</Routes>
+
+);
+
 
 }
 
 
 
 
+
+
+
+// =========================
+// LOGGED IN
+// =========================
 
 
 return (
@@ -77,21 +128,14 @@ darkMode
 
 }
 
+
 `}
 
 
 >
 
 
-
-<Sidebar
-
-collapsed={collapsed}
-
-setCollapsed={setCollapsed}
-
-/>
-
+<Sidebar />
 
 
 
@@ -101,39 +145,31 @@ setCollapsed={setCollapsed}
 <main
 
 
-className={`
+className="
 
 flex-1
 
-p-8
+ml-20
+
+lg:ml-72
+
+p-6
+
+lg:p-8
 
 transition-all
 
 duration-300
 
-
-${
-
-collapsed
-
-?
-
-"ml-20"
-
-:
-
-"ml-72"
-
-}
-
-
-`}
+"
 
 
 >
 
 
 <Routes>
+
+
 
 
 
@@ -147,6 +183,8 @@ element={<EmployeeDashboard />}
 
 
 
+
+
 <Route
 
 path="/add-time-entry"
@@ -154,6 +192,8 @@ path="/add-time-entry"
 element={<AddTimeEntry />}
 
 />
+
+
 
 
 
@@ -167,6 +207,8 @@ element={<Timesheet />}
 
 
 
+
+
 <Route
 
 path="/projects"
@@ -174,6 +216,8 @@ path="/projects"
 element={<Projects />}
 
 />
+
+
 
 
 
@@ -187,6 +231,8 @@ element={<ProjectDetails />}
 
 
 
+
+
 <Route
 
 path="/reports"
@@ -194,6 +240,8 @@ path="/reports"
 element={<Reports />}
 
 />
+
+
 
 
 
@@ -207,6 +255,8 @@ element={<Team />}
 
 
 
+
+
 <Route
 
 path="/billing"
@@ -214,6 +264,8 @@ path="/billing"
 element={<Billing />}
 
 />
+
+
 
 
 
@@ -227,11 +279,28 @@ element={<Settings />}
 
 
 
+
+
+<Route
+
+path="*"
+
+element={<Navigate to="/" replace />}
+
+/>
+
+
+
+
 </Routes>
 
 
 
+
+
 </main>
+
+
 
 
 

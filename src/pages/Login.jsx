@@ -8,25 +8,51 @@ import { useAuth } from "../context/AuthContext";
 export default function Login(){
 
 
-const {login}=useAuth();
+const { login } = useAuth();
 
-const navigate=useNavigate();
-
-
-
-const [email,setEmail]=useState("");
-
-const [password,setPassword]=useState("");
-
-const [error,setError]=useState("");
+const navigate = useNavigate();
 
 
 
+const [email,setEmail] = useState("");
+
+const [password,setPassword] = useState("");
+
+const [error,setError] = useState("");
 
 
-const submit=(e)=>{
+
+
+
+const submit = (e)=>{
 
 e.preventDefault();
+
+
+setError("");
+
+
+
+if(!email.trim()){
+
+setError("Email is required");
+
+return;
+
+}
+
+
+
+if(!password.trim()){
+
+setError("Password is required");
+
+return;
+
+}
+
+
+
 
 
 const success = login(
@@ -39,18 +65,20 @@ password
 
 
 
+
+
 if(success){
 
+
 navigate("/");
+
 
 }
 
 else{
 
 
-setError(
-"Invalid email or password"
-);
+setError("Invalid email or password");
 
 
 }
@@ -64,10 +92,14 @@ setError(
 
 
 
+
 return (
 
 
-<div className="
+<div
+
+className="
+
 min-h-screen
 
 flex
@@ -82,13 +114,16 @@ dark:bg-[#050812]
 
 p-5
 
-">
+"
 
 
+>
 
 
+<div
 
-<div className="
+className="
+
 w-full
 
 max-w-md
@@ -107,14 +142,17 @@ border-gray-200
 
 dark:border-white/10
 
-">
+"
+
+
+>
 
 
 
+<h1
 
+className="
 
-
-<h1 className="
 text-3xl
 
 font-bold
@@ -125,12 +163,13 @@ dark:text-white
 
 mb-6
 
-">
+"
+
+>
 
 Login
 
 </h1>
-
 
 
 
@@ -162,11 +201,7 @@ placeholder="Email"
 value={email}
 
 
-onChange={(e)=>
-
-setEmail(e.target.value)
-
-}
+onChange={(e)=>setEmail(e.target.value)}
 
 
 className="
@@ -195,8 +230,7 @@ outline-none
 
 "
 
-/>
-
+ />
 
 
 
@@ -216,11 +250,7 @@ placeholder="Password"
 value={password}
 
 
-onChange={(e)=>
-
-setPassword(e.target.value)
-
-}
+onChange={(e)=>setPassword(e.target.value)}
 
 
 className="
@@ -249,9 +279,7 @@ outline-none
 
 "
 
-/>
-
-
+ />
 
 
 
@@ -260,21 +288,16 @@ outline-none
 
 
 {
+
 error &&
 
-<p className="
-text-red-500
-
-text-sm
-
-">
+<p className="text-red-500 text-sm">
 
 {error}
 
 </p>
 
 }
-
 
 
 
@@ -319,8 +342,6 @@ Login
 
 
 
-
-
 </form>
 
 
@@ -330,28 +351,39 @@ Login
 
 
 
+<div
 
-<div className="
+className="
 
 mt-6
 
 text-center
 
-">
+"
 
 
-<p className="
+>
+
+
+<p
+
+className="
+
 text-sm
 
 text-gray-500
 
 dark:text-gray-400
 
-">
+"
+
+>
 
 Only VA Matters employees can access this portal.
 
 </p>
+
+
 
 
 
@@ -389,12 +421,7 @@ Create Account
 
 
 
-
-
 </div>
-
-
-
 
 
 </div>
