@@ -5,42 +5,58 @@ useState
 } from "react";
 
 
-const AuthContext=createContext();
+const AuthContext = createContext();
 
 
-
-const users=[
-
-{
-id:1,
-name:"Hamza Riaz",
-email:"hamza@test.com",
-password:"123456",
-role:"Employee"
-},
-
-{
-id:2,
-name:"Ali Khan",
-email:"ali@test.com",
-password:"123456",
-role:"Employee"
-}
-
-];
 
 
 
 export function AuthProvider({children}){
 
 
-const [user,setUser]=useState(()=>{
 
 
-const saved=localStorage.getItem("user");
+
+const [users,setUsers] = useState(()=>{
 
 
-return saved ? JSON.parse(saved) : null;
+const savedUsers = localStorage.getItem("users");
+
+
+return savedUsers
+
+?
+
+JSON.parse(savedUsers)
+
+:
+
+[];
+
+});
+
+
+
+
+
+
+
+
+const [user,setUser] = useState(()=>{
+
+
+const savedUser = localStorage.getItem("user");
+
+
+return savedUser
+
+?
+
+JSON.parse(savedUser)
+
+:
+
+null;
 
 
 });
@@ -48,39 +64,89 @@ return saved ? JSON.parse(saved) : null;
 
 
 
+
+
+
+
+
+
+
+// LOGIN
+
 const login=(email,password)=>{
 
 
-const foundUser=users.find(
+const cleanEmail = email
+
+.toLowerCase()
+
+.trim();
+
+
+
+
+
+const foundUser = users.find(
+
 
 (u)=>
 
-u.email===email &&
-u.password===password
+u.email.toLowerCase().trim() === cleanEmail
+
+&&
+
+u.password === password
+
 
 );
 
 
 
-if(foundUser){
 
 
-setUser(foundUser);
+
+if(!foundUser){
 
 
-localStorage.setItem(
-"user",
-JSON.stringify(foundUser)
-);
-
-
-return true;
+return false;
 
 
 }
 
 
-return false;
+
+
+
+
+
+// remove old session
+
+localStorage.removeItem("user");
+
+
+
+
+
+setUser(foundUser);
+
+
+
+
+
+localStorage.setItem(
+
+"user",
+
+JSON.stringify(foundUser)
+
+);
+
+
+
+
+
+
+return true;
 
 
 };
@@ -88,6 +154,211 @@ return false;
 
 
 
+
+
+
+
+
+
+
+// SIGNUP
+
+
+const signup=(name,email,password)=>{
+
+
+
+const cleanEmail = email
+
+.toLowerCase()
+
+.trim();
+
+
+
+
+
+// ONLY VA MATTERS EMAILS
+
+
+const allowedDomain = ".vamatters@gmail.com";
+
+
+
+
+
+
+if(!cleanEmail.endsWith(allowedDomain)){
+
+
+return {
+
+success:false,
+
+message:
+"Only VA Matters employees can create an account."
+
+};
+
+
+}
+
+
+
+
+
+
+
+// Check existing account
+
+
+const existingUser = users.find(
+
+
+(u)=>
+
+u.email.toLowerCase() === cleanEmail
+
+
+);
+
+
+
+
+
+
+if(existingUser){
+
+
+return {
+
+
+success:false,
+
+
+message:
+"Account already exists."
+
+
+};
+
+
+}
+
+
+
+
+
+
+
+
+
+const newUser={
+
+
+id:Date.now(),
+
+
+name:name.trim(),
+
+
+email:cleanEmail,
+
+
+password,
+
+
+role:"Employee"
+
+
+};
+
+
+
+
+
+
+
+
+const updatedUsers=[
+
+...users,
+
+newUser
+
+];
+
+
+
+
+
+
+
+setUsers(updatedUsers);
+
+
+
+
+
+localStorage.setItem(
+
+"users",
+
+JSON.stringify(updatedUsers)
+
+);
+
+
+
+
+
+
+// auto login after signup
+
+
+setUser(newUser);
+
+
+
+
+
+localStorage.setItem(
+
+"user",
+
+JSON.stringify(newUser)
+
+);
+
+
+
+
+
+
+
+return {
+
+
+success:true
+
+
+};
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+// LOGOUT
 
 
 const logout=()=>{
@@ -105,31 +376,61 @@ localStorage.removeItem("user");
 
 
 
+
+
+
+
+
+
+
 return (
 
 <AuthContext.Provider
 
+
 value={{
+
+
 user,
+
+users,
+
 login,
+
+signup,
+
 logout
+
+
 }}
+
 
 >
 
+
 {children}
+
 
 </AuthContext.Provider>
 
 
-)
+);
+
 
 }
 
 
 
+
+
+
+
+
+
 export function useAuth(){
 
+
 return useContext(AuthContext);
+
 
 }

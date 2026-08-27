@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
-
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
 
@@ -28,13 +27,13 @@ export default function App(){
 
 
 
-const {user}=useAuth();
+const { user } = useAuth();
 
-const {darkMode}=useTheme();
+const { darkMode } = useTheme();
 
 
 
-const [collapsed,setCollapsed]=useState(true);
+const [collapsed,setCollapsed] = useState(false);
 
 
 
@@ -42,10 +41,9 @@ const [collapsed,setCollapsed]=useState(true);
 
 if(!user){
 
-return <Login/>
+return <Login />
 
 }
-
 
 
 
@@ -55,8 +53,8 @@ return <Login/>
 return (
 
 
-
 <div
+
 
 className={`
 
@@ -66,6 +64,7 @@ flex
 
 
 ${
+
 darkMode
 
 ?
@@ -80,8 +79,8 @@ darkMode
 
 `}
 
->
 
+>
 
 
 
@@ -98,6 +97,7 @@ setCollapsed={setCollapsed}
 
 
 
+
 <main
 
 
@@ -105,22 +105,15 @@ className={`
 
 flex-1
 
-min-w-0
-
-p-4
-
-sm:p-6
-
-lg:p-8
-
+p-8
 
 transition-all
 
 duration-300
 
 
-
 ${
+
 collapsed
 
 ?
@@ -136,18 +129,19 @@ collapsed
 
 `}
 
+
 >
 
 
-
 <Routes>
+
 
 
 <Route
 
 path="/"
 
-element={<EmployeeDashboard/>}
+element={<EmployeeDashboard />}
 
 />
 
@@ -157,7 +151,7 @@ element={<EmployeeDashboard/>}
 
 path="/add-time-entry"
 
-element={<AddTimeEntry/>}
+element={<AddTimeEntry />}
 
 />
 
@@ -167,7 +161,7 @@ element={<AddTimeEntry/>}
 
 path="/timesheet"
 
-element={<Timesheet/>}
+element={<Timesheet />}
 
 />
 
@@ -177,7 +171,7 @@ element={<Timesheet/>}
 
 path="/projects"
 
-element={<Projects/>}
+element={<Projects />}
 
 />
 
@@ -187,7 +181,7 @@ element={<Projects/>}
 
 path="/projects/:id"
 
-element={<ProjectDetails/>}
+element={<ProjectDetails />}
 
 />
 
@@ -197,7 +191,7 @@ element={<ProjectDetails/>}
 
 path="/reports"
 
-element={<Reports/>}
+element={<Reports />}
 
 />
 
@@ -207,7 +201,7 @@ element={<Reports/>}
 
 path="/team"
 
-element={<Team/>}
+element={<Team />}
 
 />
 
@@ -217,7 +211,7 @@ element={<Team/>}
 
 path="/billing"
 
-element={<Billing/>}
+element={<Billing />}
 
 />
 
@@ -227,7 +221,7 @@ element={<Billing/>}
 
 path="/settings"
 
-element={<Settings/>}
+element={<Settings />}
 
 />
 
@@ -245,5 +239,6 @@ element={<Settings/>}
 
 
 )
+
 
 }

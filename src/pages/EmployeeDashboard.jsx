@@ -1,7 +1,30 @@
 import Card from "../components/Card";
+import { useAuth } from "../context/AuthContext";
+import ProfileMenu from "../components/ProfileMenu";
+
 
 
 export default function EmployeeDashboard(){
+
+
+const { user } = useAuth();
+
+const hour = new Date().getHours();
+
+let greeting = "Good Evening";
+
+
+if(hour < 12){
+
+greeting = "Good Morning";
+
+}
+else if(hour < 18){
+
+greeting = "Good Afternoon";
+
+}
+
 
 
 const projects = [
@@ -34,10 +57,12 @@ status:"Active"
 
 
 
+
+
 const activity = [
 
 {
-text:"Hamza added 5 hours to MITS Migration",
+text:`${user?.name || "Employee"} added 5 hours to MITS Migration`,
 time:"Today"
 },
 
@@ -55,33 +80,77 @@ time:"2 days ago"
 
 
 
+
+
+
+
 return(
 
 <div>
 
 
 
+
+
 {/* Header */}
 
-<div className="mb-8">
+<div
+
+className="
+
+mb-8
+
+flex
+
+justify-between
+
+items-start
+
+gap-5
+
+"
+
+>
 
 
-<h1 className="
+<div>
+
+
+<h1
+
+className="
+
 text-3xl
-font-bold
-text-gray-900
-dark:text-white
-">
 
-Good Morning, Hamza 👋
+font-bold
+
+text-gray-900
+
+dark:text-white
+
+"
+
+>
+
+{greeting}, {user?.name || "Employee"} 👋
 
 </h1>
 
 
-<p className="
+
+<p
+
+className="
+
 text-gray-500
+
 dark:text-gray-400
-">
+
+mt-2
+
+"
+
+>
 
 Track projects, hours, and team progress.
 
@@ -94,14 +163,43 @@ Track projects, hours, and team progress.
 
 
 
+{/* Profile */}
+
+<ProfileMenu />
+
+
+</div>
+
+
+
+
+
+
+
+
+
 {/* Summary Cards */}
 
-<div className="
+
+<div
+
+className="
+
 grid
-grid-cols-4
+
+grid-cols-1
+
+sm:grid-cols-2
+
+lg:grid-cols-4
+
 gap-5
+
 mb-10
-">
+
+"
+
+>
 
 
 <Card
@@ -128,7 +226,11 @@ value="$52,000"
 />
 
 
+
 </div>
+
+
+
 
 
 
@@ -137,45 +239,74 @@ value="$52,000"
 
 {/* Projects */}
 
+
 <div className="mb-10">
 
 
 
-<div className="
+<div
+
+className="
+
 flex
+
 justify-between
+
 items-center
+
 mb-5
-">
+
+"
+
+>
 
 
-<h2 className="
+<h2
+
+className="
+
 text-2xl
+
 font-bold
 
 text-gray-900
+
 dark:text-white
-">
+
+"
+
+>
+
 Recent Projects
+
 </h2>
 
 
 
+
 <button
+
 className="
+
 bg-[#F0884E]
+
 text-black
+
 px-5
+
 py-2
+
 rounded-lg
+
 font-semibold
+
 "
+
 >
 
 View All Projects
 
 </button>
-
 
 
 </div>
@@ -185,15 +316,28 @@ View All Projects
 
 
 
-<div className="
-grid
-grid-cols-3
-gap-6
-">
 
+<div
+
+className="
+
+grid
+
+grid-cols-1
+
+md:grid-cols-2
+
+xl:grid-cols-3
+
+gap-6
+
+"
+
+>
 
 
 {
+
 projects.map((project,index)=>(
 
 
@@ -202,35 +346,47 @@ projects.map((project,index)=>(
 key={index}
 
 className="
+
 bg-white
+
 dark:bg-[#10121C]
 
 border
+
 border-gray-200
+
 dark:border-white/10
 
 rounded-2xl
+
 p-6
 
 shadow-sm
-dark:shadow-none
 
 hover:border-[#F0884E]
 
 transition
+
 "
 
 >
 
 
-<h3 className="
+<h3
+
+className="
+
 text-xl
+
 font-bold
 
 text-gray-900
+
 dark:text-white
 
-">
+"
+
+>
 
 {project.name}
 
@@ -238,12 +394,19 @@ dark:text-white
 
 
 
-<p className="
+<p
+
+className="
+
 text-gray-500
+
 dark:text-gray-400
 
 mt-1
-">
+
+"
+
+>
 
 {project.client}
 
@@ -253,95 +416,61 @@ mt-1
 
 
 
-<div className="
+
+<div
+
+className="
+
 mt-5
+
 space-y-3
-">
+
+"
+
+>
 
 
 
-<div className="
-flex
-justify-between
-">
+<div className="flex justify-between">
 
 <span className="text-gray-500">
-
 Hours
-
 </span>
 
-
-<span className="
-text-gray-900
-dark:text-white
-">
-
+<span className="text-gray-900 dark:text-white">
 {project.hours}
-
 </span>
-
 
 </div>
 
 
 
-
-
-<div className="
-flex
-justify-between
-">
-
+<div className="flex justify-between">
 
 <span className="text-gray-500">
-
 Team
-
 </span>
 
-
-<span className="text-gray-900">
-
+<span className="text-gray-900 dark:text-white">
 {project.team}
-
 </span>
-
 
 </div>
 
 
 
 
-
-
-<div className="
-flex
-justify-between
-">
-
+<div className="flex justify-between">
 
 <span className="text-gray-500">
-
 Status
-
 </span>
 
-
-
-<span className="
-text-[#F0884E]
-font-medium
-">
-
+<span className="text-[#F0884E] font-medium">
 {project.status}
-
 </span>
-
 
 </div>
-
-
 
 
 </div>
@@ -353,16 +482,27 @@ font-medium
 <button
 
 className="
+
 mt-6
+
 w-full
+
 border
+
 border-[#F0884E]
+
 text-[#F0884E]
+
 p-3
+
 rounded-lg
+
 hover:bg-[#F0884E]
+
 hover:text-black
+
 transition
+
 "
 
 >
@@ -373,21 +513,20 @@ Open Project
 
 
 
-
 </div>
 
 
 ))
 
+
 }
 
 
-
 </div>
 
 
-
 </div>
+
 
 
 
@@ -399,49 +538,70 @@ Open Project
 {/* Bottom Section */}
 
 
-
-<div className="
-grid
-grid-cols-2
-gap-6
-">
-
-
-
-
-
-{/* Recent Activity */}
-
-
 <div
 
 className="
-bg-white
-dark:bg-[#10121C]
 
-border
-border-gray-200
-dark:border-white/10
+grid
 
-rounded-2xl
-p-6
+grid-cols-1
 
-shadow-sm
-dark:shadow-none
+lg:grid-cols-2
+
+gap-6
+
 "
 
 >
 
 
-<h2 className="
+
+
+
+
+{/* Activity */}
+
+
+<div
+
+className="
+
+bg-white
+
+dark:bg-[#10121C]
+
+border
+
+border-gray-200
+
+dark:border-white/10
+
+rounded-2xl
+
+p-6
+
+"
+
+>
+
+
+<h2
+
+className="
+
 text-xl
+
 font-bold
 
 text-gray-900
+
 dark:text-white
 
 mb-5
-">
+
+"
+
+>
 
 Recent Activity
 
@@ -449,8 +609,8 @@ Recent Activity
 
 
 
-
 {
+
 activity.map((item,index)=>(
 
 
@@ -459,48 +619,46 @@ activity.map((item,index)=>(
 key={index}
 
 className="
+
 border-b
+
 border-gray-200
+
+dark:border-white/10
+
 py-4
+
 "
 
 >
 
 
-<p className="
-text-gray-900
-dark:text-white
-">
+<p className="text-gray-900 dark:text-white">
 
 {item.text}
 
 </p>
 
 
-
-<span className="
-text-gray-500
-text-sm
-">
+<span className="text-gray-500 text-sm">
 
 {item.time}
 
 </span>
 
 
-
 </div>
-
 
 
 ))
 
+
 }
 
 
-
-
 </div>
+
+
 
 
 
@@ -511,33 +669,47 @@ text-sm
 {/* Quick Actions */}
 
 
+
 <div
+
 className="
+
 bg-white
+
 dark:bg-[#10121C]
 
 border
+
 border-gray-200
+
 dark:border-white/10
 
 rounded-2xl
+
 p-6
 
-shadow-sm
-dark:shadow-none
 "
+
 >
 
 
-<h2 className="
+<h2
+
+className="
+
 text-xl
+
 font-bold
 
 text-gray-900
+
 dark:text-white
 
 mb-5
-">
+
+"
+
+>
 
 Quick Actions
 
@@ -546,17 +718,24 @@ Quick Actions
 
 
 
-
 <button
 
 className="
+
 w-full
+
 bg-[#F0884E]
+
 text-black
+
 p-4
+
 rounded-xl
+
 font-bold
+
 mb-4
+
 "
 
 >
@@ -568,27 +747,26 @@ mb-4
 
 
 
-
-
 <button
 
 className="
+
 w-full
 
 border
+
 border-gray-300
+
 dark:border-white/20
 
 text-gray-700
+
 dark:text-white
 
 p-4
+
 rounded-xl
 
-hover:bg-gray-100
-dark:hover:bg-white/10
-
-transition
 "
 
 >
@@ -599,8 +777,8 @@ Generate Report
 
 
 
-
 </div>
+
 
 
 
@@ -616,5 +794,6 @@ Generate Report
 
 
 )
+
 
 }
