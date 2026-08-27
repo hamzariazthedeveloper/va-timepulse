@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.quill {
+border-radius: 12px;
+overflow:hidden;
+}
+
+
+.ql-toolbar {
+background:#f9fafb;
+border-color:#e5e7eb !important;
+}
+
+
+.dark .ql-toolbar {
+background:#10121C;
+border-color:#ffffff1a !important;
+}
+
+
+
+.dark .ql-container {
+background:#050812;
+border-color:#ffffff1a !important;
+color:white;
+}
+
+
+
+.dark .ql-editor {
+color:white;
+min-height:150px;
+}
+
+
+
+.ql-editor {
+min-height:150px;
+}
