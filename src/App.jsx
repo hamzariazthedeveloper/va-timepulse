@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import { useAuth } from "./context/AuthContext";
 import { useTheme } from "./context/ThemeContext";
+import { useState } from "react";
 
 
 // Public Pages
@@ -31,9 +32,17 @@ import Sidebar from "./components/Sidebar";
 export default function App(){
 
 
-const { user } = useAuth();
+const { user, loading } = useAuth();
 
 const { darkMode } = useTheme();
+
+const [collapsed,setCollapsed] = useState(false);
+
+if(loading){
+
+return null;
+
+}
 
 
 
@@ -135,7 +144,10 @@ darkMode
 >
 
 
-<Sidebar />
+<Sidebar
+    collapsed={collapsed}
+    setCollapsed={setCollapsed}
+/>
 
 
 
@@ -144,14 +156,9 @@ darkMode
 
 <main
 
-
-className="
+className={`
 
 flex-1
-
-ml-20
-
-lg:ml-72
 
 p-6
 
@@ -161,8 +168,23 @@ transition-all
 
 duration-300
 
-"
 
+${
+
+collapsed
+
+?
+
+"ml-24"
+
+:
+
+"ml-72"
+
+}
+
+
+`}
 
 >
 

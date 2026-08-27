@@ -1,26 +1,22 @@
 import { NavLink } from "react-router-dom";
 
-
 import {
-
-LayoutDashboard,
-Clock,
-Users,
-FileText,
-Settings,
-Plus,
-Briefcase,
-DollarSign,
-ChevronRight,
-ChevronLeft
-
+  LayoutDashboard,
+  Clock,
+  Users,
+  FileText,
+  Settings,
+  Plus,
+  Briefcase,
+  DollarSign,
+  ChevronRight,
+  ChevronLeft
 } from "lucide-react";
 
 
 
 
-
-const menu=[
+const menu = [
 
 {
 name:"Dashboard",
@@ -76,7 +72,6 @@ path:"/settings"
 
 
 
-
 export default function Sidebar({
 
 collapsed,
@@ -87,11 +82,7 @@ setCollapsed
 
 
 
-
-
 return (
-
-
 
 <aside
 
@@ -116,25 +107,25 @@ from-[#3A1963]
 to-[#120A24]
 
 
-
 transition-all
 
 duration-300
 
 
-
 ${
+
 collapsed
 
 ?
 
-"w-20"
+"w-24"
 
 :
 
 "w-72"
 
 }
+
 
 `}
 
@@ -145,15 +136,12 @@ collapsed
 
 
 
-
-
 {/* Logo */}
-
 
 
 <div
 
-className="
+className={`
 
 h-24
 
@@ -161,18 +149,30 @@ flex
 
 items-center
 
-justify-center
 
-"
+${
+
+collapsed
+
+?
+
+"justify-center"
+
+:
+
+"justify-center"
+
+}
+
+
+`}
 
 >
 
 
 <img
 
-
 src="/timepulse-logo.png"
-
 
 className={
 
@@ -180,7 +180,7 @@ collapsed
 
 ?
 
-"w-10"
+"w-12"
 
 :
 
@@ -190,7 +190,6 @@ collapsed
 
 
 />
-
 
 </div>
 
@@ -205,9 +204,7 @@ collapsed
 {/* Menu */}
 
 
-
 <nav
-
 
 className="
 
@@ -215,17 +212,13 @@ px-3
 
 space-y-3
 
-
 overflow-y-auto
-
 
 h-[calc(100vh-170px)]
 
 "
 
-
 >
-
 
 
 {
@@ -240,12 +233,9 @@ const Icon=item.icon;
 return (
 
 
-
 <NavLink
 
-
 key={index}
-
 
 to={item.path}
 
@@ -268,8 +258,8 @@ rounded-xl
 transition
 
 
-
 ${
+
 collapsed
 
 ?
@@ -283,8 +273,8 @@ collapsed
 }
 
 
-
 ${
+
 isActive
 
 ?
@@ -302,14 +292,10 @@ isActive
 `}
 
 
-
 >
 
 
-
 <Icon size={22}/>
-
-
 
 
 {
@@ -329,13 +315,10 @@ className="whitespace-nowrap"
 }
 
 
-
 </NavLink>
 
 
-
 )
-
 
 
 })
@@ -344,10 +327,7 @@ className="whitespace-nowrap"
 }
 
 
-
-
 </nav>
-
 
 
 
@@ -362,7 +342,6 @@ className="whitespace-nowrap"
 
 <div
 
-
 className="
 
 absolute
@@ -376,16 +355,13 @@ right-3
 "
 
 
-
 >
-
 
 
 <button
 
 
 onClick={()=>setCollapsed(!collapsed)}
-
 
 
 className="
@@ -424,7 +400,6 @@ transition
 
 {
 
-
 collapsed
 
 ?
@@ -443,7 +418,6 @@ collapsed
 </button>
 
 
-
 </div>
 
 
@@ -453,7 +427,6 @@ collapsed
 
 
 </aside>
-
 
 
 )

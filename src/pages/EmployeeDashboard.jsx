@@ -62,7 +62,7 @@ status:"Active"
 const activity = [
 
 {
-text:`${user?.name || "Employee"} added 5 hours to MITS Migration`,
+text:`${user?.user_metadata?.name || "Employee"} added 5 hours to MITS Migration`,
 time:"Today"
 },
 
@@ -132,7 +132,7 @@ dark:text-white
 
 >
 
-{greeting}, {user?.name || "Employee"} 👋
+{greeting}, {user?.user_metadata?.name || "Employee"} 👋
 
 </h1>
 

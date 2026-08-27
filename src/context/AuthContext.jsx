@@ -1,68 +1,199 @@
 import {
 createContext,
 useContext,
+useEffect,
 useState
 } from "react";
+
+
+import { supabase } from "../lib/supabase";
+
 
 
 const AuthContext = createContext();
 
 
 
-
-
 export function AuthProvider({children}){
 
 
+const [user,setUser] = useState(null);
+
+const [loading,setLoading] = useState(true);
 
 
 
-const [users,setUsers] = useState(()=>{
 
 
-const savedUsers = localStorage.getItem("users");
+// Check existing login session
+
+useEffect(()=>{
 
 
-return savedUsers
+const getSession = async()=>{
 
-?
 
-JSON.parse(savedUsers)
+const {
+data
+}= await supabase.auth.getSession();
 
-:
 
-[];
+setUser(
+data.session?.user || null
+);
+
+
+setLoading(false);
+
+
+};
+
+
+
+getSession();
+
+
+
+
+
+const {
+data:listener
+}=supabase.auth.onAuthStateChange(
+
+(event,session)=>{
+
+
+setUser(
+session?.user || null
+);
+
+
+}
+
+);
+
+
+
+return ()=>{
+
+
+listener.subscription.unsubscribe();
+
+
+};
+
+
+},[]);
+
+
+
+
+
+
+
+
+// SIGNUP
+
+const signup = async(
+name,
+email,
+password
+)=>{
+
+
+const emailLower = email.toLowerCase().trim();
+
+
+const allowedDomains = [
+    ".vamatters@gmail.com",
+    "@vamatters.com"
+];
+
+
+const isAllowed = allowedDomains.some(
+    (domain)=> emailLower.endsWith(domain)
+);
+
+
+
+if(!isAllowed){
+
+return {
+
+success:false,
+
+message:"Only VA Matters employees can signup."
+
+};
+
+}
+
+
+
+
+const {
+data,
+error
+}= await supabase.auth.signUp({
+
+
+email,
+
+password,
+
+
+options:{
+
+
+data:{
+
+
+name
+
+
+}
+
+
+}
+
 
 });
 
 
 
 
+if(error){
+
+
+return {
+
+
+success:false,
+
+message:error.message
+
+
+};
+
+
+}
 
 
 
-
-const [user,setUser] = useState(()=>{
-
-
-const savedUser = localStorage.getItem("user");
+return {
 
 
-return savedUser
-
-?
-
-JSON.parse(savedUser)
-
-:
-
-null;
+success:true,
 
 
-});
+user:data.user
+
+
+};
 
 
 
+};
 
 
 
@@ -73,39 +204,28 @@ null;
 
 // LOGIN
 
-const login=(email,password)=>{
+const login = async(
+email,
+password
+)=>{
 
 
-const cleanEmail = email
-
-.toLowerCase()
-
-.trim();
-
+const {
+data,
+error
+}= await supabase.auth.signInWithPassword({
 
 
+email,
+
+password
 
 
-const foundUser = users.find(
-
-
-(u)=>
-
-u.email.toLowerCase().trim() === cleanEmail
-
-&&
-
-u.password === password
-
-
-);
+});
 
 
 
-
-
-
-if(!foundUser){
+if(error){
 
 
 return false;
@@ -115,35 +235,7 @@ return false;
 
 
 
-
-
-
-
-// remove old session
-
-localStorage.removeItem("user");
-
-
-
-
-
-setUser(foundUser);
-
-
-
-
-
-localStorage.setItem(
-
-"user",
-
-JSON.stringify(foundUser)
-
-);
-
-
-
-
+setUser(data.user);
 
 
 return true;
@@ -159,222 +251,18 @@ return true;
 
 
 
-
-
-// SIGNUP
-
-
-const signup=(name,email,password)=>{
-
-
-
-const cleanEmail = email
-
-.toLowerCase()
-
-.trim();
-
-
-
-
-
-// ONLY VA MATTERS EMAILS
-
-
-const allowedDomain = ".vamatters@gmail.com";
-
-
-
-
-
-
-if(!cleanEmail.endsWith(allowedDomain)){
-
-
-return {
-
-success:false,
-
-message:
-"Only VA Matters employees can create an account."
-
-};
-
-
-}
-
-
-
-
-
-
-
-// Check existing account
-
-
-const existingUser = users.find(
-
-
-(u)=>
-
-u.email.toLowerCase() === cleanEmail
-
-
-);
-
-
-
-
-
-
-if(existingUser){
-
-
-return {
-
-
-success:false,
-
-
-message:
-"Account already exists."
-
-
-};
-
-
-}
-
-
-
-
-
-
-
-
-
-const newUser={
-
-
-id:Date.now(),
-
-
-name:name.trim(),
-
-
-email:cleanEmail,
-
-
-password,
-
-
-role:"Employee"
-
-
-};
-
-
-
-
-
-
-
-
-const updatedUsers=[
-
-...users,
-
-newUser
-
-];
-
-
-
-
-
-
-
-setUsers(updatedUsers);
-
-
-
-
-
-localStorage.setItem(
-
-"users",
-
-JSON.stringify(updatedUsers)
-
-);
-
-
-
-
-
-
-// auto login after signup
-
-
-setUser(newUser);
-
-
-
-
-
-localStorage.setItem(
-
-"user",
-
-JSON.stringify(newUser)
-
-);
-
-
-
-
-
-
-
-return {
-
-
-success:true
-
-
-};
-
-
-
-};
-
-
-
-
-
-
-
-
-
-
-
 // LOGOUT
 
+const logout = async()=>{
 
-const logout=()=>{
+
+await supabase.auth.signOut();
 
 
 setUser(null);
 
 
-localStorage.removeItem("user");
-
-
 };
-
-
-
-
 
 
 
@@ -390,17 +278,15 @@ return (
 
 value={{
 
-
 user,
 
-users,
+loading,
 
 login,
 
 signup,
 
 logout
-
 
 }}
 
@@ -418,8 +304,6 @@ logout
 
 
 }
-
-
 
 
 
